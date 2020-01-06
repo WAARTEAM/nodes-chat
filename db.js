@@ -6,8 +6,7 @@ client.connect();
 var SendFriendRequest = function (RequesterAndTarget, callback) {
     var requester = RequesterAndTarget.requester;
     var target = RequesterAndTarget.target;
-
-    client.query(`INSERT INTO public.Pending (requester,target, status) values(${requester},${target},Pending)`, function (err, results) {
+    client.query(`INSERT INTO public.Pending (requester,target, status) values('${requester}','${target}','Pending')`, function (err, results) {
         if (err) {
             callback(err, null);
         } else {

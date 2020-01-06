@@ -21,7 +21,7 @@ app.post('/api/SendFriendRequest', function (req, res) {
     var target = req.body.target
     val = { requester: requester, target: target }
     db.SendFriendRequest(val, (err, results) => {
-        if (data) {
+        if (results) {
             res.status(200).send(results)
         }
         if (err) {
