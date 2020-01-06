@@ -1,12 +1,13 @@
 var pg = require('pg');
 var conString = "postgres://postgres:password@localhost:5432/postgres";
-
 var client = new pg.Client(conString);
 client.connect();
 
+var SendFriendRequest = function (RequesterAndTarget, callback) {
+    var requester = RequesterAndTarget.requester;
+    var target = RequesterAndTarget.target;
 
-var insert = function (name, callback) {
-    client.query(`INSERT INTO public.users(username) values('${name}')`, function (err, results) {
+    client.query(`INSERT INTO public.Pending (requester,target, status) values(${requester},${target},Pending)`, function (err, results) {
         if (err) {
             callback(err, null);
         } else {
@@ -15,9 +16,10 @@ var insert = function (name, callback) {
     });
 }
 // update example UPDATE public.users SET friend = 'ahmed' WHERE username = 'malik'
-
-var search = function (name, callback) {
-    client.query(`select username from public.users WHERE username = '${name}' `, function (err, results) {
+//-- INSERT INTO public.Pending (id, requester, target, status) VALUES (1, 'hasan', 'teto', 'pending');
+//select requester from public.Pending where target = 'moha'
+var ShowFriendRequests = function (name, callback) {
+    client.query(`select requester from public.Pending where target = '${name}' `, function (err, results) {
         if (err) {
             callback(err, null);
         } else {
@@ -26,5 +28,5 @@ var search = function (name, callback) {
     });
 }
 
-module.exports.insert = insert;
-module.exports.search = search;
+module.exports.SendFriendRequest = SendFriendRequest;
+module.exports.ShowFriendRequests = ShowFriendRequests;

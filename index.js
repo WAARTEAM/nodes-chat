@@ -3,12 +3,12 @@ var db = require('./db.js');
 const PORT = 1234;
 var app = express();
 app.use(express.json());
-//////////////////////////////////////////////////////////// Search For a User in Database 
-app.post('/api/search', function (req, res) {
+//////////////////////////////////////////////////////////// Show Friend Requests
+app.post('/api/ShowFriendRequests', function (req, res) {
     var val = req.body.username
-    db.search(val, (err, results) => {
+    db.ShowFriendRequests(val, (err, results) => {
         if (results) {
-            res.status(200).send("FOUND")
+            res.status(200).send(results)
         }
         if (err) {
             res.send(err)
@@ -16,11 +16,13 @@ app.post('/api/search', function (req, res) {
     })
 });
 /////////////////////////////////////////////////////////// Send a Friend Request
-app.post('/api/AddFriend', function (req, res) {
-    var val = req.body.username
-    db.insert(val, (err, data) => {
+app.post('/api/SendFriendRequest', function (req, res) {
+    var requester = req.body.requester
+    var target = req.body.target
+    val = { requester: requester, target: target }
+    db.SendFriendRequest(val, (err, results) => {
         if (data) {
-            res.status(200)
+            res.status(200).send(results)
         }
         if (err) {
             console.log("not added because of system error")
