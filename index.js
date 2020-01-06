@@ -22,10 +22,25 @@ app.post('/api/SendFriendRequest', function (req, res) {
     val = { requester: requester, target: target }
     db.SendFriendRequest(val, (err, results) => {
         if (results) {
-            res.status(200).send(results)
+            res.status(200).send("SENT")
         }
         if (err) {
             console.log("not added because of system error")
+        }
+    })
+});
+/////////////////////////////////////////////////////////// Accept a Friend Request
+app.post('/api/AcceptFriendRequest', function (req, res) {
+    var requester = req.body.requester
+    var target = req.body.target
+    val = { requester: requester, target: target }
+    db.AcceptFriendRequest(val, (err, results) => {
+        if (results) {
+            res.status(200).send("Accepted")
+        }
+        if (err) {
+            res.send(err)
+            console.log(err)
         }
     })
 });
