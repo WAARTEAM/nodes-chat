@@ -17,14 +17,20 @@ function createChat(room) {
 function deleteChat(room) {
   return con.query(` DELETE FROM chatroom WHERE roomname = '${room}'`);
 }
-deleteChat("lobby");
 
 function updateroom(oldname, newname) {
   return con.query(
     `UPDATE chatroom SET roomname = '${newname}' WHERE roomname = '${oldname}'`
   );
 }
-updateroom("lobby");
+
+function readall(room) {
+  return con.query(`SELECT * FROM chatroom`);
+}
+function readone(room) {
+  return con.query(`SELECT * FROM chatroom WHERE roomname = '${room}'`);
+}
+
 module.exports.create = createChat;
 module.exports.delete = deleteChat;
 module.exports.update = updateroom;
