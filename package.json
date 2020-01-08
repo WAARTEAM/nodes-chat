@@ -1,0 +1,28 @@
+{
+  "name": "nodes-chat",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Malik-Altawati/nodes-chat.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Malik-Altawati/nodes-chat/issues"
+  },
+  "homepage": "https://github.com/Malik-Altawati/nodes-chat#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "pg": "^7.17.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
+}
