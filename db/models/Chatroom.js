@@ -34,3 +34,5 @@ function readone(room) {
 module.exports.create = createChat;
 module.exports.delete = deleteChat;
 module.exports.update = updateroom;
+module.exports.read = readall;
+module.exports.read1 = readone;
