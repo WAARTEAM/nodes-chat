@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 require("../db/models/Chatroom");
+require("../db/models/messages");
 app.use(express.json());
 
 const port = process.env.PORT || 5001;
