@@ -3,48 +3,33 @@ var db = require('./db.js');
 const PORT = 1234;
 var app = express();
 app.use(express.json());
-//////////////////////////////////////////////////////////// Show Friend Requests
-app.post('/api/ShowFriendRequests', function (req, res) {
-    var val = req.body.username
-    db.ShowFriendRequests(val, (err, results) => {
-        if (results) {
-            res.status(200).send(results)
-        }
-        if (err) {
-            res.send(err)
-        }
-    })
+
+const Friend = require('./controllers/Friends')
+
+app.post('/api/MakeFriends', function (req, res) {
+    var friend1 = req.body.friend1
+    var friend2 = req.body.friend2
+
+    Friend.Make(friend1, friend2)
+        .then((data) => {
+            res.status(200).send("ADDED")
+        })
+        .catch(err => {
+            res.status(401).send(err)
+        })
 });
-/////////////////////////////////////////////////////////// Send a Friend Request
-app.post('/api/SendFriendRequest', function (req, res) {
-    var requester = req.body.requester
-    var target = req.body.target
-    val = { requester: requester, target: target }
-    db.SendFriendRequest(val, (err, results) => {
-        if (results) {
-            res.status(200).send("SENT")
-        }
-        if (err) {
-            console.log("not added because of system error")
-        }
-    })
+
+app.post('/api/FetchFriends', function (req, res) {
+    var username = req.body.username
+    Friend.Check(username)
+        .then((data) => {
+            res.status(200).send(data)
+        })
+        .catch(err => {
+            res.status(401).send(err)
+        })
 });
-/////////////////////////////////////////////////////////// Accept a Friend Request
-app.post('/api/AcceptFriendRequest', function (req, res) {
-    var requester = req.body.requester
-    var target = req.body.target
-    val = { requester: requester, target: target }
-    db.AcceptFriendRequest(val, (err, results) => {
-        if (results) {
-            res.status(200).send("Accepted")
-        }
-        if (err) {
-            res.send(err)
-            console.log(err)
-        }
-    })
-});
-/////////////////////////////////////////////////////////////////////// PORT
+
 app.listen(PORT, () => {
     console.log(`Server is listening on port: ${PORT}`);
 });
