@@ -1,7 +1,10 @@
 const con = require("../db");
 
 const chatroomsScheema = `CREATE TABLE IF NOT EXISTS chatroom(
-    roomname VARCHAR(255) UNIQUE NOT NULL
+    roomname VARCHAR(255) UNIQUE NOT NULL,
+    AXESS TEXT[1000] NOT NULL,
+    user1
+    user2 
 
     
 );`;
