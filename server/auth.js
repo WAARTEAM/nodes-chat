@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 function middleware(req, res, next) {
-    const token = req.header('authorization').replace('bearer ', '');
+    const token = req.headers['authorization'].replace('bearer ', '');
     try {
         jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
         next();
@@ -11,12 +11,13 @@ function middleware(req, res, next) {
 }
 
 function socketMiddleware(socket, next) {
-    const token = socket.request.header('authorization').replace('bearer ', '');
+    console.log(socket.handshake.query.authorization)
+    const token = socket.handshake.query['authorization'].replace('bearer ', '');
     try {
         jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
         next()
     }
-    
+
     catch {
         socket.disconnect(true);
     }
