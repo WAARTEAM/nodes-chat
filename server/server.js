@@ -1,94 +1,33 @@
 require("dotenv").config();
 const express = require("express");
 const app = express();
-const Friend = require("../controllers/Friends");
-const Pending = require("../controllers/Pending");
-const Chatroom = require("../controllers/chatrooms");
-// require("../db/models/Chatroom");
-// require("../db/models/messages");
-
+const requests = require("./requests");
 const http = require("http").Server(app);
 const cors = require("cors");
 var io = require("socket.io")(http);
 const auth = require("./auth");
 
 app.use(cors());
-
 app.use(express.json());
-app.get("/", function(req, res) {
-  res.send("hello world");
-});
-app.post("/MakeFriends", function(req, res) {
-  var friend1 = req.body.friend1;
-  var friend2 = req.body.friend2;
-  Friend.Make(friend1, friend2)
-    .then(data => {
-      console.log("success");
-      res.send("success");
-    })
-    .catch(err => {
-      console.log(err);
-      res.send("you are friends already");
-    });
-});
-app.post("/SendFriendRequest", function(req, res) {
-  var requester = req.body.requester;
-  var target = req.body.target;
-  Pending.Send(requester, target)
-    .then(data => {
-      console.log("success");
-      res.send("success");
-    })
-    .catch(err => {
-      console.log(err);
-      res.send("friend request was sent");
-    });
-});
-app.post("/AcceptFriendRequest", function(req, res) {
-  var requester = req.body.requester;
-  var target = req.body.target;
-  Pending.DeleteFromPending(requester, target)
-    .then(data => {
-      // console.log(data);
-      // res.send(data);
-      if (data.rowCount > 0) {
-        Friend.Make(requester, target)
-          .then(data => {
-            // console.log("success");
-            //
-            Chatroom.Create(requester, target)
-              .then(data => {
-                console.log("new room created");
-                res.send(data);
-              })
-              .catch(err => {
-                console.log(err);
-                res.send(err);
-              });
-          })
-          .catch(err => {
-            console.log(err);
-            res.send("you are friends already");
-          });
-      }
-    })
-    .catch(err => {
-      console.log(err);
-      res.send("nigga something happend like very bad thing");
-    });
-});
-app.post("/ShowFriendRequest", function(req, res) {
-  var username = req.body.username;
 
-  Pending.Fetch(username)
-    .then(data => {
-      console.log(data);
-      res.send(data);
-    })
-    .catch(err => {
-      console.log(err);
-      res.send("opps! something went wrong");
+app.post("/finduser", requests.findUser);
+app.post("/sendfriendrequest", requests.sendRequest);
+app.post("/rejectfriendrequest", requests.rejectRequest);
+app.post("/acceptfriendrequest", requests.approveRequest);
+app.post("/showfriendrequest", requests.getAllRequests);
+app.post("/getmessages", requests.getChat);
+app.post("/getfriends", requests.getAllFriends);
+
+app.post("/sendmessage", function(req, res) {
+  var user1 = req.body.user1;
+  var user2 = req.body.user2;
+  var text = req.body.data;
+  Chatroom.getroomId(user1, user2).then(data => {
+    var id = data.rows[0].idno;
+    messages.Send(text, id).then(data => {
+      res.send("message sent successfuly");
     });
+  });
 });
 
 // app.use(auth.middleware);

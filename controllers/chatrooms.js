@@ -9,5 +9,15 @@ function Create(user1, user2) {
       throw err;
     });
 }
+function getroomId(user1, user2) {
+  return ChatRoomsModel.findRoom(user1, user2)
+    .then(data => {
+      return data;
+    })
+    .catch(err => {
+      throw err;
+    });
+}
 
 module.exports.Create = Create;
+module.exports.getroomId = getroomId;
