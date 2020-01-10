@@ -3,7 +3,7 @@ const express = require("express");
 const app = express();
 const Friend = require("../controllers/Friends");
 const Pending = require("../controllers/Pending");
-
+const Chatroom = require("../controllers/chatrooms");
 // require("../db/models/Chatroom");
 // require("../db/models/messages");
 
@@ -54,8 +54,17 @@ app.post("/AcceptFriendRequest", function(req, res) {
       if (data.rowCount > 0) {
         Friend.Make(requester, target)
           .then(data => {
-            console.log("success");
-            res.send("success");
+            // console.log("success");
+            //
+            Chatroom.Create(requester, target)
+              .then(data => {
+                console.log("new room created");
+                res.send(data);
+              })
+              .catch(err => {
+                console.log(err);
+                res.send(err);
+              });
           })
           .catch(err => {
             console.log(err);
@@ -82,9 +91,9 @@ app.post("/ShowFriendRequest", function(req, res) {
     });
 });
 
-app.use(auth.middleware);
+// app.use(auth.middleware);
 
-io.use(auth.socketMiddleware);
+// io.use(auth.socketMiddleware);
 
 const port = process.env.PORT || 5001;
 
