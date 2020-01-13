@@ -10,7 +10,7 @@ function Send(data, chatroom_id) {
       throw err;
     });
 }
-// pass the chat room id  to check messages function 
+// pass the chat room id  to check messages function.
 function Fetch(chatroom_id) {
   return messagesModel
     .checkMessage(chatroom_id)
